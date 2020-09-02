@@ -1,0 +1,32 @@
+﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+
+@if (identity == "Aspnet")
+{
+    <LoginDisplayIdentity />
+}
+else
+{
+    <LoginDisplayIdentityServer />
+}
+
+@code{
+
+    [CascadingParameter]
+    Task<AuthenticationState> AuthenticationState { get; set; }
+
+
+    string identity;
+
+
+    protected override void OnInitialized()
+    {
+        identity = Configuration["Identity"];
+
+        if (identity != "Aspnet")
+        {
+        }
+        else
+        {
+        }
+    }
+}

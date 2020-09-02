@@ -1,0 +1,34 @@
+﻿@page "/optimization"
+
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject HttpClient Http
+
+@inject IStringLocalizer<App> Localize
+@inject IJSRuntime JS
+
+<h3>Optimization</h3>
+
+<div>
+    @message
+
+</div>
+
+@code {
+    string message = "";
+    OptimalParameters optimal;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            optimal = await Http.GetFromJsonAsync<OptimalParameters>("Optimization/SimpleLp");
+            message = $"{optimal.ObjValue}: {optimal.X}, {optimal.Y}";
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+
+}

@@ -1,0 +1,123 @@
+﻿@page "/plotly"
+
+<h3>Plotly</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <PlotlyChart Chart="barChart" />
+        </div>
+        <div class="col-6">
+            <PlotlyChart Chart="barGradeChart" />
+        </div>
+        <div class="col-6">
+            <PlotlyChart Chart="barGroupChart" />
+        </div>
+        <div class="col-6">
+            <PlotlyChart Chart="lineChart" />
+        </div>
+        <div class="col-6">
+            <PlotlyChart Chart="pieChart" />
+        </div>
+        <div class="col-6">
+            <PlotlyChart Chart="donutChart" />
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public Goke.Plotly.Blazor.Chart barChart = new Chart
+    {
+        Traces = SampleData.BarSample,
+        Layout = new Layout
+        {
+            Title = "Grades",
+            // Xaxis = new XYAxis { Tickangle = -45 },
+            Showlegend = true,
+        },
+        Config = new Config { Responsive = true },
+    };
+
+    public Goke.Plotly.Blazor.Chart barGradeChart = new Chart
+    {
+        Traces = SampleData.BarGradeSample,
+        Layout = new Layout
+        {
+            Title = "Grades",
+            // Xaxis = new XYAxis { Tickangle = -45 },
+            Showlegend = true,
+        },
+        Config = new Config { Responsive = true },
+    };
+
+    public Goke.Plotly.Blazor.Chart barGroupChart = new Chart
+    {
+        Traces = SampleData.BarGroupSample,
+        Layout = new Layout
+        {
+            Title = "2013 Sales Report",
+            // Font = new Font { Family = "Raleway, sans-serif" },
+            // Showlegend = false,
+            Xaxis = new Axis { Tickangle = -45 },
+            Barmode = Goke.Plotly.Blazor.BarMode.Group,
+        },
+        Config = new Config { Responsive = true },
+    };
+
+    public Goke.Plotly.Blazor.Chart lineChart = new Chart
+    {
+        Traces = SampleData.LineSample,
+        Layout = new Layout
+        {
+            Title = "Line and Scatter Styling",
+        },
+        Config = new Config { Responsive = true },
+    };
+
+    public Goke.Plotly.Blazor.Chart pieChart = new Chart
+    {
+        Traces = SampleData.PieSample,
+        Layout = new Layout
+        {
+            Title = "Basic Pie",
+            Height = 400,
+            Width = 500,
+        },
+        Config = new Config { Responsive = true },
+    };
+
+    public Goke.Plotly.Blazor.Chart donutChart = new Chart
+    {
+        Traces = SampleData.DonutSample,
+        Layout = new Layout
+        {
+            Title = "Global Emissions 1990-2011",
+            //Height = 400,
+            //Width = 600,
+            Annotations = new Annotation[]
+            {
+                new Annotation
+                {
+                    Font = new Font{Size=20},
+                    Showarrow=false,
+                    Text="GHG",
+                    X=0.17F,
+                    Y=0.5F,
+                },
+                new Annotation
+                {
+                    Font = new Font{Size=20},
+                    Showarrow=false,
+                    Text="CO2",
+                    X=0.82F,
+                    Y=0.5F,
+                },
+            },
+            Showlegend = false,
+            Grid = new Grid { Rows = 1, Columns = 2 },
+        },
+        Config = new Config { Responsive = true },
+    };
+
+}

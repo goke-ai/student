@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+@inject NavigationManager navigationManager
+@inject IdentityAuthenticationStateProvider authStateProvider
+
+
+    <AuthorizeView>
+        <Authorized>
+            <ul class="navbar-nav mr-3">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @context.User.FirstName()!
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="author">Author</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href=@profile>Manage</a>
+                        <div class="dropdown-divider"></div>
+                        <button class="nav-link btn btn-link" @onclick="LogoutClick">Log out</button>
+                    </div>
+                </li>
+            </ul>
+        </Authorized>
+        <NotAuthorized>
+            <ul class="navbar-nav mr-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="@register">
+                        Register
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@login">
+                        Log in
+                    </a>
+                </li>
+            </ul>
+        </NotAuthorized>
+    </AuthorizeView>
+
+@code{
+
+    [CascadingParameter]
+    Task<AuthenticationState> AuthenticationState { get; set; }
+
+
+    string profile = "profile";
+    string register = "register";
+    string login = "login";
+
+    async Task LogoutClick()
+    {
+        await authStateProvider.Logout();
+        navigationManager.NavigateTo("/login");
+    }
+
+}

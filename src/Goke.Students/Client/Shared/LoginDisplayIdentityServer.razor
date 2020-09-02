@@ -1,0 +1,54 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+@inject NavigationManager Navigation
+@inject SignOutSessionStateManager SignOutManager
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+
+
+<AuthorizeView>
+    <Authorized>
+        <ul class="navbar-nav mr-3">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @context.User.FirstName()!
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="author">Author</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href=@profile>Manage</a>
+                    <div class="dropdown-divider"></div>
+                    <button class="nav-link btn btn-link" @onclick="BeginSignOut">Log out</button>
+                </div>
+            </li>
+        </ul>
+    </Authorized>
+    <NotAuthorized>
+        <ul class="navbar-nav mr-3">
+            <li class="nav-item">
+                <a class="nav-link" href="@register">
+                    Register
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@login">
+                    Log in
+                </a>
+            </li>
+        </ul>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code{
+
+    string profile = "authentication/profile";
+    string register = "authentication/register";
+    string login = "authentication/login";
+
+    private async Task BeginSignOut(MouseEventArgs args)
+    {
+        await SignOutManager.SetSignOutState();
+        Navigation.NavigateTo("authentication/logout");
+    }
+
+}

@@ -1,0 +1,157 @@
+﻿@page "/"
+
+@inject IStringLocalizer<App> Localize
+@inject IJSRuntime JS
+
+<h1>Student Target</h1>
+
+<h2>Set Target</h2>
+
+<EditForm Model="@studentTarget" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <p>
+        <label>
+            Target:
+            <InputSelectX @bind-Value="studentTarget.TargetId">
+                <option value="">Select target ...</option>
+                @foreach (var item in Target.Targets)
+                {
+                    <option value=@item.Id>@item.Name</option>
+                }
+            </InputSelectX>
+        </label>
+    </p>
+    <p>
+        <label>
+            Capability:
+            <InputSelectX @bind-Value="studentTarget.CapabilityId">
+                <option value="">Select grade ...</option>
+                @foreach (var item in Grade.Grades)
+                {
+                    <option value=@item.Id>@item.Name</option>
+                }
+            </InputSelectX>
+        </label>
+    </p>
+    <p>
+        <label>
+            Semesters:
+            <InputSelectX @bind-Value="studentTarget.SemesterId">
+                <option value="">Select semester ...</option>
+                @foreach (var item in Semester.Semesters)
+                {
+                    <option value=@item.Id>@item.Name</option>
+                }
+            </InputSelectX>
+        </label>
+    </p>
+    <p>
+        <label>
+            Average Course(s) Per Semester:
+            <InputNumber @bind-Value="studentTarget.AverageCoursePerSemester" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Maximum Course Unit:
+            <InputNumber @bind-Value="studentTarget.MaximumCourseUnit" />
+        </label>
+    </p>
+
+    <button type="submit">Submit</button>
+
+</EditForm>
+
+<hr />
+
+
+
+@if (barGradeChart != null)
+{
+    <div>
+        <PlotlyChart Chart="barGradeChart" />
+    </div>
+}
+
+@if (studentTarget?.Courses != null)
+{
+    <div>
+        @foreach (var c in studentTarget.Courses)
+        {
+            <div>@(c.ToString())</div>
+        }
+    </div>
+}
+
+@code {
+    private StudentTarget studentTarget = new StudentTarget();
+
+    public Goke.Plotly.Blazor.Chart barGradeChart;
+
+    private void HandleValidSubmit()
+    {
+        studentTarget.Courses = Simulate.CreateCourses(studentTarget);
+        studentTarget.Courses = Simulate.GradeCourses(studentTarget.Courses, Grade.Grades);
+
+
+
+        List<Trace> traces = new List<Trace>
+        {
+
+        };
+
+        var grp = studentTarget.Courses.GroupBy(g => g.Semester);
+        int count = 0;
+        foreach (var g in grp)
+        {
+            var trace = new Trace
+            {
+                X = g.Select(s => s.Code).ToArray(),
+                Y = g.Select(s => s.Grade.Point).ToArray(),
+                Text = g.Select(s => s.Unit).ToArray(),
+                Textposition = TextPosition.Auto,
+                //Hoverinfo = HoverInfo.None,
+                Type = Goke.Plotly.Blazor.Type.Bar,
+                Name = $"Semester {g.Key}",
+                //Marker = new Marker
+                //{
+                //    Color = new string[]{ "rgb(255,0,0)", "rgb(0,255,0)", "rgb(0,0,255)", "rgb(255,0,255)", "rgb(255,255,0)", "rgb(0,255,255)" },
+                //    Opacity = 0.7F,
+                //},
+                Xaxis=$"x{count+1}",
+                Yaxis=$"y{count+1}",
+            };
+
+            traces.Add(trace);
+            count++;
+        }
+
+        var nrows = (traces.Count / 2) + (traces.Count % 2);
+        Console.WriteLine($"nrows: {nrows}");
+
+        barGradeChart = new Chart
+        {
+            Traces = traces,
+            Layout = new Layout
+            {
+                Title = "Grades",
+                // Xaxis = new XYAxis { Tickangle = -45 },
+                // Showlegend = true,
+                Autosize=true,
+                Grid = new Grid
+                {
+                    Rows = nrows,
+                    Columns = 2,
+                    Pattern= Pattern.Independent
+                },
+                Height= 450*nrows,
+
+            },
+            Config = new Config { Responsive = true },
+        };
+
+
+    }
+}
