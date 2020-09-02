@@ -5,8 +5,4 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\goke\src\Goke.Optimization\Goke.Optimization.csproj" />
-  </ItemGroup>
-
 </Project>
