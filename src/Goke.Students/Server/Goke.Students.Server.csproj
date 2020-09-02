@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Goke.Optimization" Version="0.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.7" />
@@ -30,8 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\goke\src\Goke.Core\Goke.Core.csproj" />
-    <ProjectReference Include="..\..\..\..\goke\src\Goke.Optimization\Goke.Optimization.csproj" />
     <ProjectReference Include="..\Client\Goke.Students.Client.csproj" />
     <ProjectReference Include="..\Shared\Goke.Students.Shared.csproj" />
   </ItemGroup>
