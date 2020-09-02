@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Students.Server", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppDotNetCore", "src\ConsoleAppDotNetCore\ConsoleAppDotNetCore.csproj", "{C706A4ED-0842-4E4F-99E2-E51F7EE4FD70}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_lib", "_lib", "{479A5572-5CB2-454F-8FAC-F0917B297ADC}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_coding", "_coding", "{94EB854C-5CE5-486E-B466-758929AC97E0}"
 EndProject
 Global

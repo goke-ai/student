@@ -65,28 +65,71 @@
 </EditForm>
 
 <hr />
-
-
-
-@if (barGradeChart != null)
-{
-    <div>
-        <PlotlyChart Chart="barGradeChart" />
-    </div>
-}
-
 @if (studentTarget?.Courses != null)
 {
-    <div>
-        @foreach (var c in studentTarget.Courses)
-        {
-            <div>@(c.ToString())</div>
-        }
+    <div class="accordion" id="accordionExample">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Chart
+                    </button>
+                </h2>
+            </div>
+
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+                    @if (barGradeChart != null)
+                    {
+                        <div>
+                            <PlotlyChart Chart="barGradeChart" />
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Table
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                <div class="card-body">
+
+
+                    <div>
+                        @foreach (var c in studentTarget.Courses)
+                        {
+                            <div>@(c.ToString())</div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingThree">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Collapsible Group Item #3
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                <div class="card-body">
+                </div>
+            </div>
+        </div>
     </div>
 }
 
-@code {
-    private StudentTarget studentTarget = new StudentTarget();
+
+    @code {
+private StudentTarget studentTarget = new StudentTarget();
 
     public Goke.Plotly.Blazor.Chart barGradeChart;
 
@@ -120,8 +163,8 @@
                 //    Color = new string[]{ "rgb(255,0,0)", "rgb(0,255,0)", "rgb(0,0,255)", "rgb(255,0,255)", "rgb(255,255,0)", "rgb(0,255,255)" },
                 //    Opacity = 0.7F,
                 //},
-                Xaxis=$"x{count+1}",
-                Yaxis=$"y{count+1}",
+                Xaxis = $"x{count + 1}",
+                Yaxis = $"y{count + 1}",
             };
 
             traces.Add(trace);
@@ -139,14 +182,14 @@
                 Title = "Grades",
                 // Xaxis = new XYAxis { Tickangle = -45 },
                 // Showlegend = true,
-                Autosize=true,
+                Autosize = true,
                 Grid = new Grid
                 {
                     Rows = nrows,
                     Columns = 2,
-                    Pattern= Pattern.Independent
+                    Pattern = Pattern.Independent
                 },
-                Height= 450*nrows,
+                Height = 450 * nrows,
 
             },
             Config = new Config { Responsive = true },
@@ -154,4 +197,4 @@
 
 
     }
-}
+    }
