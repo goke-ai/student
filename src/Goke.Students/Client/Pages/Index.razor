@@ -100,7 +100,6 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                 <div class="card-body">
 
-
                     <div>
                         @foreach (var c in studentTarget.Courses)
                         {
@@ -115,12 +114,20 @@
             <div class="card-header" id="headingThree">
                 <h2 class="mb-0">
                     <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Collapsible Group Item #3
+                        Tools
                     </button>
                 </h2>
             </div>
             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
                 <div class="card-body">
+                    <div class="d-flex flex-wrap">
+                        @foreach (var bar in barGradeCharts)
+                        {
+                            <div>
+                                <PlotlyChart Chart="bar" />
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
@@ -128,10 +135,11 @@
 }
 
 
-    @code {
-private StudentTarget studentTarget = new StudentTarget();
+@code {
+    private StudentTarget studentTarget = new StudentTarget();
 
     public Goke.Plotly.Blazor.Chart barGradeChart;
+    public List<Goke.Plotly.Blazor.Chart> barGradeCharts;
 
     private void HandleValidSubmit()
     {
@@ -139,14 +147,17 @@ private StudentTarget studentTarget = new StudentTarget();
         studentTarget.Courses = Simulate.GradeCourses(studentTarget.Courses, Grade.Grades);
 
 
+        string[] colors = { "rgb(255,0,0)", "rgb(0,255,0)", "rgb(0,0,255)", "rgb(255,0,255)", "rgb(255,255,0)", "rgb(0,255,255)" };
 
         List<Trace> traces = new List<Trace>
         {
 
         };
+        barGradeCharts = new List<Chart>();
 
         var grp = studentTarget.Courses.GroupBy(g => g.Semester);
         int count = 0;
+
         foreach (var g in grp)
         {
             var trace = new Trace
@@ -155,24 +166,171 @@ private StudentTarget studentTarget = new StudentTarget();
                 Y = g.Select(s => s.Grade.Point).ToArray(),
                 Text = g.Select(s => s.Unit).ToArray(),
                 Textposition = TextPosition.Auto,
+                Textfont = new Font
+                {
+                    Color = "rgb(255,255,255)",
+                },
                 //Hoverinfo = HoverInfo.None,
                 Type = Goke.Plotly.Blazor.Type.Bar,
                 Name = $"Semester {g.Key}",
-                //Marker = new Marker
-                //{
-                //    Color = new string[]{ "rgb(255,0,0)", "rgb(0,255,0)", "rgb(0,0,255)", "rgb(255,0,255)", "rgb(255,255,0)", "rgb(0,255,255)" },
-                //    Opacity = 0.7F,
-                //},
+                Marker = new Marker
+                {
+                    Line = new Line
+                    {
+                        Color = "rgb(8,48,107)",
+                        Width = 1.5f,
+                    },
+                    //Cauto = true,
+                    //Autocolorscale = true,
+                    //Reversescale = false,
+                    Color = g.Select(s => s.Grade.Point).ToArray(),
+                    Cmin = -1.0,
+                    Cmax = 5.0,
+                    Colorscale = new object[][]
+                    {
+                        new object[]{0, colors[0]},
+                        new object[]{0.2, colors[1]},
+                        new object[]{0.4, colors[2]},
+                        new object[]{0.6, colors[3]},
+                        new object[]{0.8, colors[4]},
+                        new object[]{1, colors[5]},
+                        },
+                    Showscale = true,
+                },
+                Opacity = 0.6F,
                 Xaxis = $"x{count + 1}",
                 Yaxis = $"y{count + 1}",
             };
 
             traces.Add(trace);
+
+            //
+            var barChart = new Chart
+            {
+                Traces = new List<Trace> { trace },
+                Layout = new Layout
+                {
+                    Title = $"Semester {g.Key}",
+                    // Xaxis = new XYAxis { Tickangle = -45 },
+                    Yaxis = new Axis
+                    {
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+
+                    },
+                    // Showlegend = true,
+                    // Autosize = true,
+                    Width = 450,
+                },
+                Config = new Config { Responsive = true },
+            };
+
+            switch (count+1)
+            {
+                case 0:
+                case 1:
+                    break;
+                case 2:
+                    barChart.Layout.Yaxis2 = new Axis
+                    {
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 3:
+                    barChart.Layout.Yaxis3 = new Axis
+                    {
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 4:
+                    barChart.Layout.Yaxis4 = new Axis
+                    {
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 5:
+                    barChart.Layout.Yaxis5 = new Axis
+                    {
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 6:
+                    barChart.Layout.Yaxis6 = new Axis
+                    {
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 7:
+                    barChart.Layout.Yaxis7 = new Axis
+                    {
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 8:
+                    barChart.Layout.Yaxis8 = new Axis
+                    {
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 9:
+                    barChart.Layout.Yaxis9 = new Axis
+                    {
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 10:
+                    barChart.Layout.Yaxis10 = new Axis
+                    {
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 11:
+                    barChart.Layout.Yaxis11 = new Axis
+                    {
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 12:
+                    barChart.Layout.Yaxis12 = new Axis
+                    {
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+
+                default:
+                    break;
+            }
+
+
+            barGradeCharts.Add(barChart);
+
             count++;
         }
 
         var nrows = (traces.Count / 2) + (traces.Count % 2);
-        Console.WriteLine($"nrows: {nrows}");
 
         barGradeChart = new Chart
         {
@@ -181,6 +339,11 @@ private StudentTarget studentTarget = new StudentTarget();
             {
                 Title = "Grades",
                 // Xaxis = new XYAxis { Tickangle = -45 },
+                Yaxis = new Axis
+                {
+                    Range = new object[] { -1.0, 5.0 },
+                    Autorange = false,
+                },
                 // Showlegend = true,
                 Autosize = true,
                 Grid = new Grid
@@ -195,6 +358,116 @@ private StudentTarget studentTarget = new StudentTarget();
             Config = new Config { Responsive = true },
         };
 
+        for (int i = 1; i <= traces.Count; i++)
+        {
+            switch (i)
+            {
+                case 0:
+                case 1:
+                    break;
+                case 2:
+                    barGradeChart.Layout.Yaxis2 = new Axis
+                    {
+                        Anchor = $"x{i}",
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 3:
+                    barGradeChart.Layout.Yaxis3 = new Axis
+                    {
+                        Anchor = $"x{i}",
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 4:
+                    barGradeChart.Layout.Yaxis4 = new Axis
+                    {
+                        Anchor = $"x{i}",
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 5:
+                    barGradeChart.Layout.Yaxis5 = new Axis
+                    {
+                        Anchor = $"x{i}",
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 6:
+                    barGradeChart.Layout.Yaxis6 = new Axis
+                    {
+                        Anchor = $"x{i}",
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 7:
+                    barGradeChart.Layout.Yaxis7 = new Axis
+                    {
+                        Anchor = $"x{i}",
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 8:
+                    barGradeChart.Layout.Yaxis8 = new Axis
+                    {
+                        Anchor = $"x{i}",
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 9:
+                    barGradeChart.Layout.Yaxis9 = new Axis
+                    {
+                        Anchor = $"x{i}",
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 10:
+                    barGradeChart.Layout.Yaxis10 = new Axis
+                    {
+                        Anchor = $"x{i}",
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 11:
+                    barGradeChart.Layout.Yaxis11 = new Axis
+                    {
+                        Anchor = $"x{i}",
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
+                case 12:
+                    barGradeChart.Layout.Yaxis12 = new Axis
+                    {
+                        Anchor = $"x{i}",
+                        Type = AxisType.Linear,
+                        Range = new object[] { -1, 5 },
+                        Autorange = false,
+                    };
+                    break;
 
+                default:
+                    break;
+            }
+        }
     }
-    }
+}

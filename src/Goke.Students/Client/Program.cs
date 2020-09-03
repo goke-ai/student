@@ -59,7 +59,8 @@ namespace Goke.Students.Client
             // builder.Services.AddScoped<AccountClaimsPrincipalFactory<RemoteUserAccount>, OfflineAccountClaimsPrincipalFactory>();
 
             builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
-            // builder.Services.AddTransient<IStringLocalizer, StringLocalizer>()
+
+            builder.Services.AddTransient<Goke.Optimization.MFO>();
 
             await builder.Build().RunAsync();
         }

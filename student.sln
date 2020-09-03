@@ -13,6 +13,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppDotNetCore", "src
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_coding", "_coding", "{94EB854C-5CE5-486E-B466-758929AC97E0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_dll", "_dll", "{72650B4B-1631-40D9-946C-22C4482331C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Plotly.Blazor", "..\plotly.blazor\src\Plotly.Blazor\Goke.Plotly.Blazor.csproj", "{A6FC51E1-A823-4CE8-A756-6DA281A9B736}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Optimization", "..\goke\src\Goke.Optimization\Goke.Optimization.csproj", "{65A007D5-8587-404B-B8D1-1756666F53EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,12 +41,21 @@ Global
 		{C706A4ED-0842-4E4F-99E2-E51F7EE4FD70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C706A4ED-0842-4E4F-99E2-E51F7EE4FD70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C706A4ED-0842-4E4F-99E2-E51F7EE4FD70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6FC51E1-A823-4CE8-A756-6DA281A9B736}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6FC51E1-A823-4CE8-A756-6DA281A9B736}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6FC51E1-A823-4CE8-A756-6DA281A9B736}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6FC51E1-A823-4CE8-A756-6DA281A9B736}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65A007D5-8587-404B-B8D1-1756666F53EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65A007D5-8587-404B-B8D1-1756666F53EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65A007D5-8587-404B-B8D1-1756666F53EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65A007D5-8587-404B-B8D1-1756666F53EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C706A4ED-0842-4E4F-99E2-E51F7EE4FD70} = {94EB854C-5CE5-486E-B466-758929AC97E0}
+		{A6FC51E1-A823-4CE8-A756-6DA281A9B736} = {72650B4B-1631-40D9-946C-22C4482331C2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A4E23C5-9D2D-4FF9-A851-73961B083D28}

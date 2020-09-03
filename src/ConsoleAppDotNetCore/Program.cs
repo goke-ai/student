@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using Goke.Optimization;
 
 
@@ -12,8 +14,88 @@ namespace ConsoleAppDotNetCore
             (double ObjValue, double X, double Y) = Ortools.SimpleLpProgram();
             Console.WriteLine($"\n=======\n{ObjValue}: {X}, {X}\n");
 
+            //
+            var mfo = new MFO();
+            
+            mfo.Test();
+
+            //
+
+            double[] gradePoints = { 1, 2, 3, 4, 5 };
+            var unit = new double[] { 1, 3, 4, 2, 5 };
+            var cgpa = 3.5;
+
+            Func<double[], double> Fn = (x) =>
+            {
+                var U = unit;
+                var CGPA = cgpa;
+
+                double sum1 = 0;
+                double sum2 = 0;
+                for (int i = 0; i < x.Length; i++)
+                {
+                    sum1 += x[i] * U[i];
+                    sum2 += CGPA * U[i];
+                }
+                return Math.Abs(sum1 - sum2);
+            };
+
+            var nsa = 30;
+            var max_iter = 1000;
+
+            double lb = 1;
+            double ub = 5;
+            int dim = 5;
+
+            int soln = 20;
+
+            double[] bFlameScores = new double[soln];
+            double[][] bFlamesPositions = new double[soln][];
+            double[][] convergenceCurves = new double[soln][];
+
+            for (int i = 0; i < soln; i++)
+            {
+                (bFlameScores[i], bFlamesPositions[i], convergenceCurves[i]) = mfo.Search(nsa, dim, ub, lb, max_iter, Fn);
+            }
+            double mean = 0.0;
+            double sum = 0.0;
+            for (int i = 0; i < bFlameScores.Length; i++)
+            {
+                sum += bFlameScores[i];
+            }
+            mean = sum / bFlameScores.Length;
+
+            double std = 0.0;
+
+            Console.WriteLine($"Mean : {mean}");
+            Console.WriteLine($"Standard deviation : {std}");
+
+            double[][] rFlamesPositions = new double[soln][];
+
+            for (int i = 0; i < bFlamesPositions.Length; i++)
+            {
+                double sumG = 0;
+                double sumU = 0;
+
+                rFlamesPositions[i] = new double[dim];
+                for (int j = 0; j < dim; j++)
+                {
+                    // find index
+                    var v = bFlamesPositions[i][j];
+                    var k = gradePoints.ToList().Find(f => (v - f) < 0.35);
+                    rFlamesPositions[i][j] = k;
+
+                    sumG += (k * unit[j]);
+                    sumU += unit[j];
+
+                    Console.Write($"{k},  ");
+                }
+                Console.Write($": {sumG / sumU}");
+
+                Console.WriteLine();
+            }
         }
-        
+
         /*
         private static void SimpleLP()
         {
