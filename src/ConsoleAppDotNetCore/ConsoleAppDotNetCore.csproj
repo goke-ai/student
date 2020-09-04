@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\goke\src\Goke.Optimization\Goke.Optimization.csproj" />
+    <PackageReference Include="Goke.Optimization" Version="0.6.0" />
   </ItemGroup>
 
 </Project>

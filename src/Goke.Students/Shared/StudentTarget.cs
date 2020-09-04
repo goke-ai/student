@@ -9,15 +9,15 @@ namespace Goke.Students.Shared
     public class StudentTarget
     {
         [Required]
-        public int TargetId { get; set; }
+        public int TargetId { get; set; } = 2;
         public Target Target => Target.Targets.FirstOrDefault(f => f.Id == TargetId);
 
         [Required]
-        public int CapabilityId { get; set; }
+        public int CapabilityId { get; set; } = 1;
         public Grade Capability => Grade.Grades.FirstOrDefault(f => f.Id == CapabilityId);
 
         [Required]
-        public int SemesterId { get; set; }
+        public int SemesterId { get; set; } = 3;
         public Semester SemesterPerYear => Semester.Semesters.FirstOrDefault(f => f.Id == SemesterId);
 
         public int AverageCoursePerSemester { get; set; } = 4;

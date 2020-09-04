@@ -14,6 +14,8 @@
   <ItemGroup>
     <PackageReference Include="BlazorInputFile" Version="0.2.0" />
     <PackageReference Include="Goke.Core" Version="1.0.0" />
+    <PackageReference Include="Goke.Optimization" Version="0.6.0" />
+    <PackageReference Include="Goke.Plotly.Blazor" Version="1.7.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.1" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.1" PrivateAssets="all" />
@@ -24,8 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\goke\src\Goke.Optimization\Goke.Optimization.csproj" />
-    <ProjectReference Include="..\..\..\..\plotly.blazor\src\Plotly.Blazor\Goke.Plotly.Blazor.csproj" />
     <ProjectReference Include="..\Shared\Goke.Students.Shared.csproj" />
   </ItemGroup>
 

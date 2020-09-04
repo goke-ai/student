@@ -15,16 +15,13 @@ namespace ConsoleAppDotNetCore
             Console.WriteLine($"\n=======\n{ObjValue}: {X}, {X}\n");
 
             //
-            var mfo = new MFO();
-            
-            mfo.Test();
-
-            //
-
             double[] gradePoints = { 1, 2, 3, 4, 5 };
             var unit = new double[] { 1, 3, 4, 2, 5 };
-            var cgpa = 3.5;
+            var cgpa = 4;
 
+            Ortools.CGPALpProgram(unit, cgpa);
+
+            //
             Func<double[], double> Fn = (x) =>
             {
                 var U = unit;
@@ -55,7 +52,7 @@ namespace ConsoleAppDotNetCore
 
             for (int i = 0; i < soln; i++)
             {
-                (bFlameScores[i], bFlamesPositions[i], convergenceCurves[i]) = mfo.Search(nsa, dim, ub, lb, max_iter, Fn);
+                (bFlameScores[i], bFlamesPositions[i], convergenceCurves[i]) = MFO.Search(nsa, dim, ub, lb, max_iter, Fn);
             }
             double mean = 0.0;
             double sum = 0.0;
@@ -77,7 +74,7 @@ namespace ConsoleAppDotNetCore
                 double sumG = 0;
                 double sumU = 0;
 
-                rFlamesPositions[i] = new double[dim];
+                rFlamesPositions[i] = new double[dim+1];
                 for (int j = 0; j < dim; j++)
                 {
                     // find index
@@ -90,8 +87,21 @@ namespace ConsoleAppDotNetCore
 
                     Console.Write($"{k},  ");
                 }
-                Console.Write($": {sumG / sumU}");
+                rFlamesPositions[i][dim] = sumG / sumU;
+                Console.Write($": {rFlamesPositions[i][dim]}");
 
+                Console.WriteLine();
+            }
+            Console.WriteLine("=========================");
+
+
+            var sorted = rFlamesPositions.Distinct().Where(w => w[dim] >= cgpa).OrderBy(o => o[dim]);
+            foreach (var tt in sorted)
+            {
+                foreach (var t in tt)
+                {
+                    Console.Write($"{t}, ");
+                }
                 Console.WriteLine();
             }
         }
