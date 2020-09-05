@@ -100,8 +100,8 @@ namespace Goke.Students.Shared
 
             double std = 0.0;
 
-            Console.WriteLine($"Mean : {mean}");
-            Console.WriteLine($"Standard deviation : {std}");
+            // Console.WriteLine($"Mean : {mean}");
+            // Console.WriteLine($"Standard deviation : {std}");
 
             double[][] rFlamesPositions = new double[soln][];
 
@@ -121,24 +121,24 @@ namespace Goke.Students.Shared
                     sumG += (k * unit[j]);
                     sumU += unit[j];
 
-                    Console.Write($"{k},  ");
+                    // Console.Write($"{k},  ");
                 }
                 rFlamesPositions[i][dim] = sumG / sumU;
-                Console.Write($": {rFlamesPositions[i][dim]}");
+                // Console.Write($": {rFlamesPositions[i][dim]}");
 
-                Console.WriteLine();
+                // Console.WriteLine();
             }
-            Console.WriteLine("=========================");
+            // Console.WriteLine("=========================");
 
             var gpSolutions = rFlamesPositions.Distinct().Where(w => w[dim] >= cgpa).OrderBy(o => o[dim]).ToList();
-            foreach (var tt in gpSolutions)
-            {
-                foreach (var t in tt)
-                {
-                    Console.Write($"{t}, ");
-                }
-                Console.WriteLine();
-            }
+            //foreach (var tt in gpSolutions)
+            //{
+            //    foreach (var t in tt)
+            //    {
+            //        // Console.Write($"{t}, ");
+            //    }
+            //    // Console.WriteLine();
+            //}
 
             var selectedGPs = gpSolutions.First();
             courses = SetCourseGradePoints(courses, grades, selectedGPs);
@@ -146,7 +146,19 @@ namespace Goke.Students.Shared
             List<Course>[] alternativeCourses = new List<Course>[gpSolutions.Count() - 1];
             for (int i = 1; i < gpSolutions.Count(); i++)
             {
-                var list = new List<Course>(courses);
+                var list = new List<Course>();
+                foreach (var c in courses)
+                {
+                    list.Add(new Course { 
+                    Code = c.Code,
+                    GradeId = c.GradeId,
+                    Semester = c.Semester,
+                    Title = c.Title,
+                    Unit = c.Unit,
+                    Id = c.Id,
+                    });
+                }
+
                 list = SetCourseGradePoints(list, grades, gpSolutions[i]);
                 alternativeCourses[i - 1] = list;
             }

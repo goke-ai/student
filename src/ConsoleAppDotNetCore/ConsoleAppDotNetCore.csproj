@@ -9,4 +9,8 @@
     <PackageReference Include="Goke.Optimization" Version="0.6.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Goke.Students\Shared\Goke.Students.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

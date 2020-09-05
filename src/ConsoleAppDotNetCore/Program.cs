@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Goke.Optimization;
-
+using Goke.Students.Shared;
 
 namespace ConsoleAppDotNetCore
 {
@@ -22,85 +22,26 @@ namespace ConsoleAppDotNetCore
             Ortools.CGPALpProgram(unit, cgpa);
 
             //
-            Func<double[], double> Fn = (x) =>
+            StudentTarget studentTarget = new StudentTarget();
+            studentTarget.Courses = Simulate.CreateCourses(studentTarget);
+            // studentTarget.Courses = Simulate.GradeCourses(studentTarget.Courses, Grade.Grades);
+            var optimal = Simulate.OptimalGradeCourses(studentTarget.Target.Point, studentTarget.Courses, Grade.Grades);
+
+            Console.WriteLine("=========");
+
+            foreach (var x in optimal.courses)
             {
-                var U = unit;
-                var CGPA = cgpa;
-
-                double sum1 = 0;
-                double sum2 = 0;
-                for (int i = 0; i < x.Length; i++)
-                {
-                    sum1 += x[i] * U[i];
-                    sum2 += CGPA * U[i];
-                }
-                return Math.Abs(sum1 - sum2);
-            };
-
-            var nsa = 30;
-            var max_iter = 1000;
-
-            double lb = 1;
-            double ub = 5;
-            int dim = 5;
-
-            int soln = 20;
-
-            double[] bFlameScores = new double[soln];
-            double[][] bFlamesPositions = new double[soln][];
-            double[][] convergenceCurves = new double[soln][];
-
-            for (int i = 0; i < soln; i++)
-            {
-                (bFlameScores[i], bFlamesPositions[i], convergenceCurves[i]) = MFO.Search(nsa, dim, ub, lb, max_iter, Fn);
+                Console.Write($"{x.Grade.Point}, ");
             }
-            double mean = 0.0;
-            double sum = 0.0;
-            for (int i = 0; i < bFlameScores.Length; i++)
+
+            Console.WriteLine();
+            Console.WriteLine("=========");
+
+            foreach (var aCourses in optimal.alternativeCourses)
             {
-                sum += bFlameScores[i];
-            }
-            mean = sum / bFlameScores.Length;
-
-            double std = 0.0;
-
-            Console.WriteLine($"Mean : {mean}");
-            Console.WriteLine($"Standard deviation : {std}");
-
-            double[][] rFlamesPositions = new double[soln][];
-
-            for (int i = 0; i < bFlamesPositions.Length; i++)
-            {
-                double sumG = 0;
-                double sumU = 0;
-
-                rFlamesPositions[i] = new double[dim+1];
-                for (int j = 0; j < dim; j++)
+                foreach (var x in aCourses)
                 {
-                    // find index
-                    var v = bFlamesPositions[i][j];
-                    var k = gradePoints.ToList().Find(f => (v - f) < 0.35);
-                    rFlamesPositions[i][j] = k;
-
-                    sumG += (k * unit[j]);
-                    sumU += unit[j];
-
-                    Console.Write($"{k},  ");
-                }
-                rFlamesPositions[i][dim] = sumG / sumU;
-                Console.Write($": {rFlamesPositions[i][dim]}");
-
-                Console.WriteLine();
-            }
-            Console.WriteLine("=========================");
-
-
-            var sorted = rFlamesPositions.Distinct().Where(w => w[dim] >= cgpa).OrderBy(o => o[dim]);
-            foreach (var tt in sorted)
-            {
-                foreach (var t in tt)
-                {
-                    Console.Write($"{t}, ");
+                    Console.Write($"{x.Grade.Point}, ");
                 }
                 Console.WriteLine();
             }
