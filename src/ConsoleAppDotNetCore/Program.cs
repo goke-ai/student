@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Goke.Optimization;
 using Goke.Students.Shared;
 
@@ -8,7 +9,7 @@ namespace ConsoleAppDotNetCore
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             // SimpleLP();
             (double ObjValue, double X, double Y) = Ortools.SimpleLpProgram();
@@ -23,9 +24,9 @@ namespace ConsoleAppDotNetCore
 
             //
             StudentTarget studentTarget = new StudentTarget();
-            studentTarget.Courses = Simulate.CreateCourses(studentTarget);
+            studentTarget.Courses = await Simulate.CreateCoursesAsync(studentTarget);
             // studentTarget.Courses = Simulate.GradeCourses(studentTarget.Courses, Grade.Grades);
-            var optimal = Simulate.OptimalGradeCourses(studentTarget.Target.Point, studentTarget.Courses, Grade.Grades);
+            var optimal = await Simulate.OptimalGradeCoursesAsync(studentTarget.Target.Point, studentTarget.Courses, Grade.Grades);
 
             Console.WriteLine("=========");
 
