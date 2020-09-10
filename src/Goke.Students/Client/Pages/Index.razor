@@ -4,190 +4,96 @@
 @inject IJSRuntime JS
 @inject NavigationManager NavigationManager
 
-<h1>Student Target</h1>
+    <div style="width: 50vw; margin: 0 auto; margin-top: 2rem">
+        <h3>Student Target</h3>
 
-<h2>Set Target</h2>
+        <h4>Set Target</h4>
 
-<EditForm Model="@studentTarget" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+        <EditForm Model="@studentTarget" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-    <p>
-        <label>
-            Target:
-            <InputSelectX @bind-Value="studentTarget.TargetId">
-                <option value="">Select target ...</option>
-                @foreach (var item in Target.Targets)
-                {
-                    <option value=@item.Id>@item.Name</option>
-                }
-            </InputSelectX>
-        </label>
-    </p>
-    <p>
-        <label>
-            Capability:
-            <InputSelectX @bind-Value="studentTarget.CapabilityId">
-                <option value="">Select grade ...</option>
-                @foreach (var item in Grade.Grades)
-                {
-                    <option value=@item.Id>@item.Name</option>
-                }
-            </InputSelectX>
-        </label>
-    </p>
-    <p>
-        <label>
-            Semesters:
-            <InputSelectX @bind-Value="studentTarget.SemesterId">
-                <option value="">Select semester ...</option>
-                @foreach (var item in Semester.Semesters)
-                {
-                    <option value=@item.Id>@item.Name</option>
-                }
-            </InputSelectX>
-        </label>
-    </p>
-    <p>
-        <label>
-            Average Course(s) Per Semester:
-            <InputNumber @bind-Value="studentTarget.AverageCoursePerSemester" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Maximum Course Unit:
-            <InputNumber @bind-Value="studentTarget.MaximumCourseUnit" />
-        </label>
-    </p>
+            <div class="form-group row">
+                <label for="target" class="col-sm-5 col-form-label">Target</label>
+                <div class="col-sm-7">
 
-    <button type="submit">Submit</button>
-
-</EditForm>
-
-<hr />
-@if (start)
-{
-    <Busy />
-}
-
-@if (studentTarget?.Courses != null)
-{
-    <div class="accordion" id="accordionExample">
-        <div class="card">
-            <div class="card-header" id="headingOne">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Chart
-                    </button>
-                </h2>
-            </div>
-
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                <div class="card-body">
-                    @if (barGradeChart != null)
-                    {
-                        <div>
-                            <PlotlyChart Chart="barGradeChart" />
-                        </div>
-                    }
-
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header" id="headingTwo">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Table
-                    </button>
-                </h2>
-            </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                <div class="card-body">
-
-                    <div>
-                        @foreach (var c in studentTarget.Courses)
+                    <InputSelectX @bind-Value="studentTarget.TargetId" id="target">
+                        <option value="">Select target ...</option>
+                        @foreach (var item in Target.Targets)
                         {
-                            <div>@(c.ToString())</div>
+                            <option value=@item.Id>@item.Name</option>
                         }
-                    </div>
+                    </InputSelectX>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="capability" class="col-sm-5 col-form-label">Capability</label>
+                <div class="col-sm-7">
 
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header" id="headingThree">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Tools
-                    </button>
-                </h2>
-            </div>
-            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                <div class="card-body">
-                    <div class="d-flex flex-wrap">
-                        @if (barGradeCharts != null)
+                    <InputSelectX @bind-Value="studentTarget.CapabilityId" id="capability">
+                        <option value="">Select grade ...</option>
+                        @foreach (var item in Grade.Grades)
                         {
-                            @foreach (var bar in barGradeCharts)
-                            {
-                                <div>
-                                    <PlotlyChart Chart="bar" />
-                                </div>
-                            }
+                            <option value=@item.Id>@item.Name</option>
                         }
-                    </div>
+                    </InputSelectX>
                 </div>
             </div>
-        </div>
-        @for (int i = 0; i < barSubplots?.Count; i++)
-        {
-            var k = i;
-            var headText = $"heading_{k}";
-            var idText = $"collapse_{k}";
-            <div class="card">
-                <div class="card-header" id="@headText">
-                    <h2 class="mb-0">
-                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target=@($"#{idText}") aria-expanded="false" aria-controls=@idText>
-                            Tools
-                        </button>
-                    </h2>
-                </div>
-                <div id=@idText class="collapse" aria-labelledby="@headText" data-parent="#accordionExample">
-                    <div class="card-body">
-                        <div>
-                            <PlotlyChart Chart=@barSubplots[k] />
-                        </div>
-                    </div>
+            <div class="form-group row">
+                <label for="semesters" class="col-sm-5 col-form-label">Semesters</label>
+                <div class="col-sm-7">
+                    <InputSelectX @bind-Value="studentTarget.SemesterId" id="semesters">
+                        <option value="">Select semester ...</option>
+                        @foreach (var item in Semester.Semesters)
+                        {
+                            <option value=@item.Id>@item.Name</option>
+                        }
+                    </InputSelectX>
                 </div>
             </div>
-        }
+            <div class="form-group row">
+                <label for="averageCoursePerSemester" class="col-sm-5 col-form-label">Average Course(s) Per Semester</label>
+                <div class="col-sm-7">
+                    <InputNumber @bind-Value="studentTarget.AverageCoursePerSemester" id="averageCoursePerSemester" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="maximumCourseUnit" class="col-sm-5 col-form-label">Maximum Course Unit</label>
+                <div class="col-sm-7">
+                    <InputNumber @bind-Value="studentTarget.MaximumCourseUnit" id="maximumCourseUnit" />
+                </div>
+            </div>
+
+
+            <button type="submit">Submit</button>
+
+        </EditForm>
     </div>
-}
 
 
-@code {
-    private StudentTarget studentTarget = new StudentTarget();
 
-    protected override async Task OnInitializedAsync()
-    {
+    @code {
+        private StudentTarget studentTarget = new StudentTarget();
+
+        protected override async Task OnInitializedAsync()
+        {
+
+        }
+
+        public Goke.Plotly.Blazor.Chart barGradeChart;
+        public List<Goke.Plotly.Blazor.Chart> barSubplots;
+        public List<Goke.Plotly.Blazor.Chart> barGradeCharts;
+
+        bool start;
+
+        private async Task HandleValidSubmit()
+        {
+            var jsonString = System.Text.Json.JsonSerializer.Serialize(studentTarget);
+            await JS.InvokeAsync<string>("setLocalStorage", "studentTarget", jsonString);
+
+            NavigationManager.NavigateTo("Optimization");
+
+        }
+
 
     }
-
-    public Goke.Plotly.Blazor.Chart barGradeChart;
-    public List<Goke.Plotly.Blazor.Chart> barSubplots;
-    public List<Goke.Plotly.Blazor.Chart> barGradeCharts;
-
-    bool start;
-
-    private async Task HandleValidSubmit()
-    {
-        var jsonString = System.Text.Json.JsonSerializer.Serialize(studentTarget);
-        await JS.InvokeAsync<string>("setLocalStorage", "studentTarget", jsonString);
-
-        NavigationManager.NavigateTo("Optimization");       
-
-    }
-
-   
-}

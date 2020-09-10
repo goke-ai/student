@@ -6,108 +6,135 @@
 @inject IStringLocalizer<App> Localize
 @inject IJSRuntime JS
 
-<h3>Optimization</h3>
+<div style="margin-top: 2rem">
+    <h3>Optimization</h3>
 
-@if (studentTarget?.Courses == null)
-{
-    <Busy />
-}
-else
-{
-    <div class="accordion" id="accordionExample">
-        <div class="card">
-            <div class="card-header" id="headingOne">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Chart
-                    </button>
-                </h2>
-            </div>
-
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                <div class="card-body">
-                    @if (barGradeChart != null)
-                    {
-                        <div>
-                            <PlotlyChart Chart="barGradeChart" />
-                        </div>
-                    }
-
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header" id="headingTwo">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Table
-                    </button>
-                </h2>
-            </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                <div class="card-body">
-
-                    <div>
-                        @foreach (var c in studentTarget.Courses)
-                        {
-                            <div>@(c.ToString())</div>
-                        }
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header" id="headingThree">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Tools
-                    </button>
-                </h2>
-            </div>
-            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                <div class="card-body">
-                    <div class="d-flex flex-wrap">
-                        @if (barGradeCharts != null)
-                        {
-                            @foreach (var bar in barGradeCharts)
-                            {
-                                <div>
-                                    <PlotlyChart Chart="bar" />
-                                </div>
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-        @for (int i = 0; i < barSubplots?.Count; i++)
-        {
-            var k = i;
-            var headText = $"heading_{k+2}";
-            var idText = $"collapse_{k+2}";
+    @if (barGradeChart == null)
+    {
+        <Busy />
+    }
+    else
+    {
+        <div class="accordion" id="accordionExample">
             <div class="card">
-                <div class="card-header" id="@headText">
+                <div class="card-header" id="headingOne">
                     <h2 class="mb-0">
-                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target=@($"#{idText}") aria-expanded="false" aria-controls=@idText>
-                            Alternative Chart @(k+2)
+                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Chart
                         </button>
                     </h2>
                 </div>
-                <div id=@idText class="collapse" aria-labelledby="@headText" data-parent="#accordionExample">
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                     <div class="card-body">
-                        <div>
-                            <PlotlyChart Chart=@barSubplots[k] />
+                        @if (barGradeChart != null)
+                        {
+                            <div>
+                                <PlotlyChart Chart="barGradeChart" />
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Table
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div class="card-body">
+
+                        @if (studentTarget.Courses != null)
+                        {
+                        <table class="table table-striped">
+                            <tr>
+                                <th>@(nameof(Course.Id))</th>
+                                <th>@(nameof(Course.Semester))</th>
+                                <th>@(nameof(Course.Code))</th>
+                                <th>@(nameof(Course.Title))</th>
+                                <th>@(nameof(Course.Unit))</th>
+                                <th>@(nameof(Course.GradeId))</th>
+                                <th>@(nameof(Course.Grade.Name))</th>
+                                <th>@(nameof(Course.Grade.Point))</th>
+                            </tr>
+
+                            @foreach (var c in studentTarget.Courses)
+                            {
+                                <tr>
+                                    <td>@(c.Id)</td>
+                                    <td>@(c.Semester)</td>
+                                    <td>@(c.Code)</td>
+                                    <td>@(c.Title)</td>
+                                    <td>@(c.Unit)</td>
+                                    <td>@(c.GradeId)</td>
+                                    <td>@(c.Grade?.Name)</td>
+                                    <td>@(c.Grade?.Point)</td>
+                                </tr>
+
+                            }
+                        </table>
+
+                        }
+
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Standalone Charts
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap">
+                            @if (barGradeCharts != null)
+                            {
+                                @foreach (var bar in barGradeCharts)
+                                {
+                                    <div>
+                                        <PlotlyChart Chart="bar" />
+                                    </div>
+                                }
+                            }
                         </div>
                     </div>
                 </div>
             </div>
-        }
-    </div>
-}
+            @for (int i = 0; i < barSubplots?.Count; i++)
+            {
+                var k = i;
+                var headText = $"heading_{k + 2}";
+                var idText = $"collapse_{k + 2}";
+                <div class="card">
+                    <div class="card-header" id="@headText">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target=@($"#{idText}") aria-expanded="false" aria-controls=@idText>
+                                Alternative Chart @(k+2)
+                            </button>
+                        </h2>
+                    </div>
+                    <div id=@idText class="collapse" aria-labelledby="@headText" data-parent="#accordionExample">
+                        <div class="card-body">
+                            <div>
+                                <PlotlyChart Chart=@barSubplots[k] />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
 
 @code {
-    private StudentTarget studentTarget = new StudentTarget();
+    private StudentTarget studentTarget;
 
     public Goke.Plotly.Blazor.Chart barGradeChart;
     public List<Goke.Plotly.Blazor.Chart> barSubplots;
@@ -115,7 +142,16 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        var jsonString = await JS.InvokeAsync<string>("getLocalStorage", "studentTarget");
 
+        studentTarget = System.Text.Json.JsonSerializer.Deserialize<StudentTarget>(jsonString);
+
+        var t = Task.Run(async () =>
+        {
+
+            await ComputeAsync();
+            await this.InvokeAsync(StateHasChanged);
+        });
     }
 
     protected override void OnAfterRender(bool firstRender)
@@ -125,38 +161,30 @@ else
         }
     }
 
-    protected override async Task OnParametersSetAsync()
+    private async Task ComputeAsync()
     {
-        var jsonString = await JS.InvokeAsync<string>("getLocalStorage", "studentTarget");
-
-        studentTarget = System.Text.Json.JsonSerializer.Deserialize<StudentTarget>(jsonString);
-        Compute();
-
-    }
-
-    private void Compute()
-    {
-        studentTarget.Courses = Simulate.CreateCourses(studentTarget);
+        studentTarget.Courses = await Simulate.CreateCoursesAsync(studentTarget);
         // studentTarget.Courses = Simulate.GradeCourses(studentTarget.Courses, Grade.Grades);
-        var optimal = Simulate.OptimalGradeCourses(studentTarget.Target.Point, studentTarget.Courses, Grade.Grades);
+        var optimal = await Simulate.OptimalGradeCoursesAsync(studentTarget.Target.Point, studentTarget.Courses, Grade.Grades);
 
         studentTarget.Courses = optimal.courses;
         var alternativeCourses = optimal.alternativeCourses;
 
-        barGradeChart = subplotChart(studentTarget.Courses);
+        barGradeChart = await subplotChartAsync(studentTarget.Courses);
+
         if (alternativeCourses != null && alternativeCourses.Length > 0)
         {
             barSubplots = new List<Chart>();
             foreach (var item in alternativeCourses)
             {
-                barSubplots.Add(subplotChart(item));
+                barSubplots.Add(await subplotChartAsync(item));
             }
         }
 
-
+        multipleChart();
     }
 
-    Goke.Plotly.Blazor.Chart subplotChart(List<Course> courses)
+    protected Task<Goke.Plotly.Blazor.Chart> subplotChartAsync(List<Course> courses)
     {
         string[] colors = Color.Colors2;
 
@@ -201,7 +229,7 @@ else
                         new object[]{0.6, colors[3]},
                         new object[]{0.8, colors[4]},
                         new object[]{1, colors[5]},
-                                            },
+                                                },
                     Showscale = true,
                 },
                 Opacity = 0.6F,
@@ -355,7 +383,7 @@ else
             }
         }
 
-        return barChart;
+        return Task.FromResult(barChart);
     }
 
     void multipleChart()
@@ -403,7 +431,7 @@ else
                         new object[]{0.6, colors[3]},
                         new object[]{0.8, colors[4]},
                         new object[]{1, colors[5]},
-                                            },
+                                                },
                     Showscale = true,
                 },
                 Opacity = 0.6F,

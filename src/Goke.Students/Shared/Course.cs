@@ -16,7 +16,7 @@ namespace Goke.Students.Shared
 
         public override string ToString()
         {
-            return $"Id: {Id}, Semester: {Semester}, Code: {Code}, Title: {Title}, Unit: {Unit}, GradeId: {GradeId}, Grade: {Grade.Point}";
+            return $"Id: {Id}, Semester: {Semester}, Code: {Code}, Title: {Title}, Unit: {Unit}, GradeId: {GradeId}, Grade: {Grade?.Point}";
         }
     }
 }

@@ -3,12 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Goke.Students.Shared
 {
     public class Simulate
     {
-        public static List<Course> CreateCourses(StudentTarget studentTarget)
+        public static Task<List<Course>> CreateCoursesAsync(StudentTarget studentTarget)
         {
             Random rnd = new Random();
 
@@ -16,6 +17,7 @@ namespace Goke.Students.Shared
 
             if (studentTarget?.AverageCoursePerSemester > 0)
             {
+                var id = 0;
                 for (int s = 0; s < studentTarget.SemesterPerYear.Value; s++)
                 {
                     for (int c = 0; c < studentTarget.AverageCoursePerSemester; c++)
@@ -23,6 +25,7 @@ namespace Goke.Students.Shared
                         var code = $"X{s + 1}0{c + 1}";
                         var course = new Course
                         {
+                            Id = ++id,
                             Semester = s+1,
                             Code = code,
                             Title = $"Title of {code}",
@@ -34,7 +37,7 @@ namespace Goke.Students.Shared
                 }
             }
 
-            return courses;
+            return Task.FromResult(courses);
         }
 
         public static List<Course> GradeCourses(List<Course> courses, List<Grade> grades)
@@ -52,7 +55,7 @@ namespace Goke.Students.Shared
             return courses;
         }
 
-        public static (List<Course> courses, List<Course>[] alternativeCourses) OptimalGradeCourses(double target, List<Course> courses, List<Grade> grades)
+        public static Task<(List<Course> courses, List<Course>[] alternativeCourses)> OptimalGradeCoursesAsync(double target, List<Course> courses, List<Grade> grades)
         {
             float[] gradePoints = grades.Where(w => w.Point > 0).Select(s => s.Point).OrderBy(o => o).ToArray();
             var unit = courses.Select(s => s.Unit).ToArray();
@@ -163,7 +166,7 @@ namespace Goke.Students.Shared
                 alternativeCourses[i - 1] = list;
             }
 
-            return (courses, alternativeCourses);
+            return Task.FromResult((courses, alternativeCourses));
         }
 
         private static List<Course> SetCourseGradePoints(List<Course> courses, List<Grade> grades, double[] selectedGPs)
